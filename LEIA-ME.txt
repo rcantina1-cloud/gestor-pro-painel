@@ -1,0 +1,46 @@
+GESTOR PRO PAINEL — pacote revisado para validação antes da publicação
+
+CONTEÚDO: site estático (index.html, app.js, supa.js, styles.css, manifest, ícones e netlify.toml).
+PUBLICAÇÃO: Netlify > Add new site > Deploy manually > envie o ZIP/pasta.
+PUBLICAÇÃO POR GIT: envie o CONTEÚDO desta pasta para a RAIZ do repositório (package.json, netlify.toml e index.html lado a lado, sem pasta extra por fora). No Netlify, deixe Base directory vazio; Build command e Publish directory são lidos do netlify.toml (npm run build / ".").
+
+CORREÇÃO DO ERRO "package.json não encontrado" (esta revisão)
+- Adicionados package.json (sem dependências; o Supabase continua vindo do CDN) e scripts/verify.mjs, que apenas confere os arquivos antes de publicar.
+- netlify.toml: build = "npm run build", publish = "." e Node 20. Nenhum arquivo do app, supa.js ou configuração do Supabase foi alterado.
+
+
+CORREÇÃO NESTA REVISÃO
+- A exportação JSON agora inclui também os dados de detalhes e pagamentos de vendas, sessões e movimentos de caixa, configurações da empresa, assinaturas, faturas e planos, além das tabelas operacionais já exportadas.
+
+CORREÇÃO DO ERRO "Deploy directory 'dist' does not exist" (esta revisão)
+- Novo scripts/build.mjs: confere os arquivos, cria a pasta dist/ e copia para ela index.html, app.js, supa.js, styles.css, sw.js, manifest.webmanifest e icons/. Depois valida que a dist não está vazia.
+- package.json: "build" agora executa "node scripts/build.mjs" ("check" continua conferindo só a origem).
+- netlify.toml: publish = "dist" (command continua "npm run build").
+- Adicionado .gitignore (dist/ e node_modules/): a dist é gerada pelo Netlify a cada deploy.
+- No Netlify (Site configuration > Build & deploy), use: Build command = npm run build, Publish directory = dist, Base directory vazio.
+- Para testar localmente: npm run build  (cria ./dist)
+
+ATENÇÃO — AINDA NÃO É UMA LIBERAÇÃO DEFINITIVA
+1. O formulário de fechamento recebe o valor contado, mas a chamada atual ao banco é apenas fechar_caixa_v2(), sem enviar esse valor. Assim, a diferença é exibida na tela, porém não há evidência no código do site de que o valor contado/diferença seja gravado no Supabase. A função SQL e a estrutura da tabela precisam ser conferidas e corrigidas no banco antes do uso real do fechamento.
+2. As Edge Functions asaas-assinar e o webhook do Asaas não estão dentro deste ZIP. Precisam ser conferidos no Supabase (implantação, segredos e URL do webhook). Nunca coloque a chave secreta do Asaas ou service_role no site.
+3. Este ZIP não contém migrações SQL nem definições das funções RPC. Portanto, a auditoria do front-end não comprova que todas as funções e políticas RLS estejam corretas no Supabase.
+
+SUPABASE
+- O site usa a URL e a chave pública publishable já configuradas em supa.js. Não substitua por service_role.
+- Depois de publicar, configure Authentication > URL Configuration com a URL real do Netlify em Site URL e Redirect URLs.
+- Preserve o projeto Supabase existente. Não crie outro projeto para esta revisão.
+
+TESTES APÓS A VALIDAÇÃO DO BANCO
+- Login e recuperação de senha.
+- Cadastro de produto, estoque, compra, venda e cancelamento.
+- Abertura, movimentação e fechamento do caixa (incluindo gravação do valor contado e diferença).
+- Exportação JSON e impressão 58/80 mm.
+- Assinatura Asaas, pagamento de teste e confirmação pelo webhook.
+
+
+REVISÃO COMPLETA (painel admin + correções)
+- Fechamento de caixa: rode supabase/fechamento-caixa.sql (cria valor_contado/diferenca e a função gravar_contagem_caixa). O app chama fechar_caixa_v2() e em seguida grava o valor contado; se a função não existir, avisa na tela. Mostra Contado/Diferença no histórico.
+- Painel admin: rode supabase/admin-painel.sql (PASSO 1), depois o PASSO 2 com o seu e-mail. admin_definir_acesso agora lê os status aceitos pela constraint e mostra o erro real do banco; admin_listar_clientes prefere tabelas "membro". O painel marca "Bloqueado" também pelo status.
+- Segurança de deploy: /admin.html com CSP, no-store, noindex e anti-iframe; build.mjs recusa publicar se achar segredo (JWT, Asaas, sk_live) ou a pasta supabase/.
+- Exportação JSON avisa quando uma tabela atinge 10000 linhas.
+- AINDA PENDENTE (exige acesso ao Supabase): rodar o PASSO 3 do admin-painel.sql, validar RLS, Edge Function asaas-assinar e webhook. Nada disso pôde ser testado aqui.

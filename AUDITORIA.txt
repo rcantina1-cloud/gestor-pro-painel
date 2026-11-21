@@ -1,0 +1,12 @@
+AUDITORIA DO PACOTE GESTOR PRO PAINEL
+
+Verificações realizadas no conteúdo do ZIP recebido:
+- Estrutura estática: index.html, app.js, supa.js, styles.css, sw.js, manifest.webmanifest, netlify.toml e ícones.
+- app.js e supa.js passaram na verificação de sintaxe do Node.js (node --check).
+- A aplicação usa Supabase Auth e várias funções RPC; as definições SQL e Edge Functions não estão incluídas no pacote.
+- O fluxo de fechamento coleta o valor contado, mas chama fechar_caixa_v2() sem argumento. O front-end calcula a diferença para exibição, mas não grava explicitamente o valor contado.
+- O fluxo de cobrança chama a Edge Function asaas-assinar; o webhook não está no ZIP.
+- A exportação JSON foi ampliada para incluir tabelas adicionais utilizadas diretamente pela aplicação.
+
+STATUS
+Revisão estática parcial concluída. Não foi possível executar login, consultar o banco remoto, validar políticas RLS, testar Edge Functions ou confirmar webhook, pois isso exige acesso ao Supabase e ambiente publicado. Não considerar pronto para produção até resolver e testar os itens acima.

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="application-name" content="Gestor Pro Painel"><title>Gestor Pro Painel — Administração</title>
+<link rel="stylesheet" href="styles.css">
+<style>.wrap2{max-width:980px;margin:0 auto;padding:12px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:10px 0}
+.cards button{text-align:left;padding:10px}.cards b{display:block;font-size:22px}.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.t-teste{background:#e6effc;color:#1b4a9c}.t-pago{background:#e8f4eb;color:#173b2b}.t-pend{background:#fff4e5;color:#7a4b00}.t-bloq{background:#fdecea;color:#8a1c12}.t-fim{background:#eee;color:#444}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.acts button{width:auto}.err{color:#8a1c12}</style></head>
+<body>
+<div id="login" class="wrap2" style="max-width:380px;margin-top:60px"><form class="loginbox" id="f" novalidate>
+<div class="mark">G</div><h2>Administração da plataforma</h2>
+<label for="em">E-mail</label><input id="em" type="email" autocomplete="username">
+<label for="se">Senha</label><input id="se" type="password" autocomplete="current-password">
+<button type="submit" id="go">Entrar</button><p id="msg"></p></form></div>
+<div id="app" class="wrap2" hidden>
+<header class="topbar"><div class="brand"><span class="mark">G</span><div><strong>Gestor Pro Painel — Administração</strong><small id="quem"></small></div></div><button type="button" id="sair" class="sec">Sair</button></header>
+<div class="cards" id="cards"></div>
+<input id="busca" placeholder="Buscar por empresa ou e-mail"><button type="button" id="atualizar" class="sec">Atualizar</button>
+<section class="panel" id="lista"><p>Carregando...</p></section></div>
+<script type="module" src="admin.js"></script></body></html>

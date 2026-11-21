@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b2b">
+  <meta name="application-name" content="Gestor Pro Painel">
+  <meta name="apple-mobile-web-app-title" content="Gestor Pro Painel">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Gestor Pro Painel</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="locked">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">G</span>
+      <div><strong>Gestor Pro Painel</strong><small id="empresaNome">Gestão comercial online</small></div>
+    </div>
+    <span class="status" id="connectionStatus">Verificando...</span>
+    <span id="userBox"></span>
+  </header>
+
+  <main class="wrap">
+    <div id="banner" hidden></div>
+    <nav class="modules" id="nav"></nav>
+    <section class="panel" id="view"></section>
+  </main>
+
+  <div id="loginOverlay" hidden>
+    <form class="loginbox" id="loginForm" novalidate>
+      <div class="mark">G</div>
+      <h2>Entrar no Gestor Pro Painel</h2>
+      <label for="loginEmail">E-mail</label>
+      <input id="loginEmail" type="email" autocomplete="username" placeholder="voce@email.com">
+      <label for="loginSenha">Senha</label>
+      <input id="loginSenha" type="password" autocomplete="current-password" placeholder="Mínimo 8 caracteres">
+      <label for="loginEmpresa">Nome da empresa (só no primeiro cadastro)</label>
+      <input id="loginEmpresa" placeholder="Ex.: Minha Cantina">
+      <button type="button" id="btnEntrar">Entrar</button>
+      <button type="button" id="btnCriar" class="sec">Criar conta (7 dias grátis)</button>
+      <button type="button" id="btnRecuperar" class="lnk">Esqueci minha senha</button>
+      <p id="loginMsg"></p>
+    </form>
+    <form class="loginbox" id="recForm" hidden novalidate>
+      <div class="mark">G</div>
+      <h2>Definir nova senha</h2>
+      <label for="recSenha">Nova senha</label>
+      <input id="recSenha" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+      <button type="button" id="btnNovaSenha">Salvar nova senha</button>
+      <p id="recMsg"></p>
+    </form>
+  </div>
+
+  <div id="toast" hidden></div>
+  <pre id="cupomPrint"></pre>
+  <footer>Gestor Pro Painel</footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
